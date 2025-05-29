@@ -11,9 +11,8 @@ export default class ConsoleSelectOption {
     displayKey;
     value;
     color;
-
     getDisplay(){
-        return  convertToColorMessage(this.key + ' - ' + this.value, this.color);
+        return convertToColorMessage(this.key + ' - ' + this.value, this.color);
     }
 }
 

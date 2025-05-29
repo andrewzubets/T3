@@ -1,6 +1,6 @@
 import ConsoleSelectOption, {EXIT_OPTION, HELP_OPTION} from "./ConsoleSelectOption.js";
 import readlineSync from "readline-sync";
-import {COLORS, writeLine} from "./GameConsole.js";
+import {COLORS, convertToColorMessage, writeLine} from "./GameConsole.js";
 
 export default class ConsoleAsker {
     constructor(helpProbability) {
@@ -17,23 +17,22 @@ export default class ConsoleAsker {
         this.charCode = 48; /* '0' */
         this.options = [];
     }
-    prepare(options){
+    prepare(question, options){
         this.reset();
+        this.question = question;
         this.setOptions(options);
         this.display = this.getDisplay();
     }
     setOptions(options) {
         options.forEach(item => {
-            this.options.push(new ConsoleSelectOption(this.getCurrentKey(), item));
+            const currentKey = String.fromCharCode(this.charCode);
+            this.options.push(new ConsoleSelectOption(currentKey, item));
             this.setNextKey();
         });
         this.options.push(HELP_OPTION);
         this.options.push(EXIT_OPTION);
         let keyList = this.getKeyList(this.options);
         this.evaluateReadOptionsFromOptions(this.options, keyList);
-    }
-    getCurrentKey(){
-        return String.fromCharCode(this.charCode);
     }
     setNextKey() {
         this.charCode = this.charCode === 57 /* '9' */ ? 97 /* 'a' */ : this.charCode + 1;
@@ -58,7 +57,7 @@ export default class ConsoleAsker {
         return keyList;
     }
     getDisplay() {
-        let display = this.question + NEW_LINE;
+        let display =NEW_LINE + convertToColorMessage(this.question, COLORS.YELLOW) + NEW_LINE;
         this.options.forEach(option => {
             display+= option.getDisplay() + NEW_LINE;
         });
@@ -66,7 +65,7 @@ export default class ConsoleAsker {
         return display;
     }
     askUser(question, options, helpMessage) {
-        this.prepare(options);
+        this.prepare(question, options);
         let userChoice;
         do {
             userChoice = readlineSync.keyIn(this.display, this.readOptions).toLowerCase();

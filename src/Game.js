@@ -3,7 +3,7 @@ import { writeLine } from "./console/GameConsole.js";
 
 export default class Game {
     constructor(config, gameConsole, security, fairNumberProtocol, helpProbability) {
-        this.dices = config.getDices();
+        this.dices = config.dices;
         this.doLoop = true;
         this.console = gameConsole;
         this.security = security;
@@ -29,7 +29,6 @@ export default class Game {
             ? this.security.generateRandomNumber(0,dices.length - 1)
             : this.console.askPlayerToPickDice(dices, isFirst);
     }
-
     pickDices(isComputerFirst) {
         const firstDice = this.pickDice(isComputerFirst);
         const secondDice =  this.pickDice(!isComputerFirst, firstDice);
@@ -39,7 +38,6 @@ export default class Game {
             computer: isComputerFirst ? firstDice : secondDice,
         }
     }
-
     rollDice(dice, isComputer){
         this.console.writeTimeToRoll(isComputer);
         let fairNumber = this.fairNumberProtocol.getFairNumber();
@@ -56,6 +54,8 @@ export default class Game {
 
         const gameResult = this.getGameResult(playerRollResult, computerRollResult);
         this.console.writeGameResult(gameResult, playerRollResult, computerRollResult);
+
+        this.console.anyKeyPress();
         return true;
     }
     getGameResult(playerRollResult, computerRollResult){
@@ -64,7 +64,6 @@ export default class Game {
             : (playerRollResult < computerRollResult
                 ? GAME_RESULT.LOST : GAME_RESULT.DRAW);
     }
-
     isComputerPicksFirst(){
         writeLine('Let\'s determine who makes the first move.');
         const computerSelection = this.security.generateRandomNumber(0,1);

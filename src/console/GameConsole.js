@@ -1,12 +1,12 @@
 import {convertDiceToString} from "../Dice.js";
 import {GAME_RESULT} from "../Game.js";
+import readlineSync from "readline-sync";
 
 export default class GameConsole {
     constructor(asker) {
         this.asker = asker;
     }
     asker;
-
     askPlayerSelection(question, options, helpMessage){
         return this.asker.askUser(question, options, helpMessage);
     }
@@ -33,10 +33,10 @@ export default class GameConsole {
         const range =  convertToColorMessage('0..' + rangeMax, COLORS.YELLOW);
         writeLine(`I selected a random value in the range ${range} (HMAC=${hmacValue}).`);
     }
-    writeComputerRevealValue(verifiableValue, selectionWord = 'selection') {
+    writeComputerRevealValue(verifiableValue, selectionWord = 'selection:') {
         const keyValue = convertToColorMessage(verifiableValue.verificationKey, COLORS.GREEN);
         const value = convertToColorMessage(verifiableValue.value, COLORS.YELLOW);
-        writeLine(`My ${selectionWord}: ${value} (KEY=${keyValue}).`);
+        writeLine(`My ${selectionWord} ${value} (KEY=${keyValue}).`);
     }
     writeFairNumberGenerationResult(computerNumber, playerNumber, fairNumber){
         writeLine('The fair number generation result is '
@@ -68,7 +68,7 @@ export default class GameConsole {
         );
     }
     writeGameResult(gameResult, playerRollResult, computerRollResult){
-        writeLine('-');
+        writeLine('\n-');
         if(gameResult === GAME_RESULT.WIN){
             writeLine(`You win (${playerRollResult} > ${computerRollResult})!`,COLORS.GREEN);
         }
@@ -81,6 +81,12 @@ export default class GameConsole {
             writeLine('It\'s draw!',COLORS.YELLOW);
         }
         writeLine('-');
+    }
+    anyKeyPress(){
+        readlineSync.keyInPause( convertToColorMessage('\nPress any key to continue...\n', COLORS.CYAN),{
+            guide: false
+        });
+
     }
 }
 
@@ -107,5 +113,6 @@ export const writeLine = (line = '', color = COLORS.DEFAULT) => {
     console.log(convertToColorMessage(line, color));
 };
 export const writeError = (message) => {
-    console.error(convertToColorMessage(message, COLORS.RED));
+    console.error( convertToColorMessage('Error: ', COLORS.RED)
+        + message);
 }

@@ -9,16 +9,11 @@ export default class FairNumberProtocol {
     computerNumberVerifiable;
     playerNumber;
     fairNumber;
-    setComputerNumber(){
-        const computerNumber = this.security.generateRandomNumber(0, this.rangeMax);
-        this.computerNumberVerifiable = this.security.createVerifiableValue(computerNumber);
-    }
-
     getFairNumber() {
         this.setComputerNumber();
         this.console.writeComputerSelectedValue(this.computerNumberVerifiable, this.rangeMax);
         this.setPlayerNumber();
-        this.console.writeComputerRevealValue(this.computerNumberVerifiable, 'number');
+        this.console.writeComputerRevealValue(this.computerNumberVerifiable, 'number is');
         this.calculateFairNumber();
         this.console.writeFairNumberGenerationResult(
             this.computerNumberVerifiable.value,
@@ -26,6 +21,10 @@ export default class FairNumberProtocol {
             this.fairNumber
         );
         return this.fairNumber;
+    }
+    setComputerNumber(){
+        const computerNumber = this.security.generateRandomNumber(0, this.rangeMax);
+        this.computerNumberVerifiable = this.security.createVerifiableValue(computerNumber);
     }
     setPlayerNumber() {
         this.playerNumber = this.console.askPlayerRangeSelection(

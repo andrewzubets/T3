@@ -4,13 +4,10 @@ import {COLORS, convertToColorMessage} from "./GameConsole.js";
 
 export default class HelpProbability {
     constructor(configData) {
-        const dices = configData.getDices();
-        const table = this.calculateProbabilityTable(dices);
+        const table = this.calculateProbabilityTable(configData.dices);
         this.renderedTable = this.renderProbabilityTable(table);
     }
-
     renderedTable;
-
     renderProbabilityTable(tableData) {
         const table = new AsciiTable3('Win probability');
         table.setAlign(10, AlignmentEnum.CENTER);

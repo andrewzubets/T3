@@ -22,8 +22,8 @@ try {
         fairNumberProtocol,
         helpProbability
     );
-    while (game.play()){}
-}
-catch (error){
+    while (game.play()) {
+    }
+} catch (error) {
     writeError(error.message);
 }
