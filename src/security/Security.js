@@ -3,10 +3,7 @@ import VerifiableValue from "./VerifiableValue.js";
 
 export default class Security {
     generateRandomNumber(min,max){
-        return Math.ceil((
-            crypto.randomInt(min, max)
-            + Math.floor(Math.random() * (max - min + 1)
-            ) + min) / 2);
+        return crypto.randomInt(min, max);
     }
     generateVerificationKey(){
         return crypto.randomBytes(32).toString('hex');
